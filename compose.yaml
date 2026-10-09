@@ -1,0 +1,52 @@
+name: lab3-bookstore
+services:
+  db:
+    image: lab3-bookstore-db:1.0
+    build:
+      context: .
+      dockerfile: postgres/Dockerfile
+    environment:
+      POSTGRES_DB: bookstore
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      APP_PASSWORD: ${APP_PASSWORD:?Set APP_PASSWORD in .env}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale-provider=libc --locale=ru_RU.UTF-8 --auth-host=scram-sha-256 --auth-local=trust"
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bookstore"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  app:
+    image: lab3-bookstore-app:1.0
+    build: .
+    profiles: ["tools"]
+    env_file:
+      - ${APP_ENV_FILE:-./app.env}
+    depends_on:
+      db:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./logs:/logs
+  web:
+    image: lab3-bookstore-app:1.0
+    build: .
+    command: ["python", "web.py"]
+    profiles: ["tools"]
+    env_file:
+      - ${APP_ENV_FILE:-./app.env}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8083:8080"
+    volumes:
+      - ./logs:/logs
+volumes:
+  pgdata:

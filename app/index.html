@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Книжная полка · ЛР 3</title><link rel="stylesheet" href="/style.css"><script src="/ui.js" defer></script></head>
+<body>
+  <section id="login-screen" class="login-screen">
+    <div class="welcome"><div class="eyebrow">ЛАБОРАТОРНАЯ РАБОТА №3</div><h1>Все истории<br>начинаются<br>с одной книги.</h1><p>Книги, авторы, покупатели и заказы —<br>в одной базе данных.</p><div class="book-art" aria-hidden="true"><span>АВТОРЫ</span><span>КНИГИ</span><span>ИСТОРИИ</span></div></div>
+    <form id="login-form" class="login-card"><div class="brand">▤ Книжная полка</div><h2>Вход в магазин</h2><p class="muted">Введи учётные данные PostgreSQL.</p><label>Логин<input name="username" value="bookstore_user" autocomplete="username" required></label><label>Пароль<input name="password" type="password" autocomplete="current-password" placeholder="Пароль пользователя" required></label><button class="primary" type="submit">Войти</button><p id="login-error" class="error" role="alert" hidden></p><p class="footnote">Учебная база bookstore · PostgreSQL 18</p></form>
+  </section>
+  <div id="workspace" hidden>
+    <aside><div class="brand">▤ Книжная полка</div><div class="eyebrow">БАЗА ДАННЫХ</div><nav id="tables" aria-label="Таблицы"></nav><div class="side-bottom"><span class="dot"></span> Подключено к bookstore<p id="session-user"></p><button id="logout" class="quiet">Выйти из аккаунта</button></div></aside>
+    <main><header><span class="eyebrow">ЛАБОРАТОРНАЯ №3 / КНИЖНЫЙ МАГАЗИН</span><span class="pill">PostgreSQL 18</span></header>
+      <section class="page-title"><div><h1 id="table-title">Книги</h1><p id="table-description" class="muted"></p></div><button id="refresh" class="secondary">Обновить</button></section>
+      <div id="message" role="status" aria-live="polite" hidden></div>
+      <section class="data-card"><div class="toolbar"><div class="toolbar-left"><strong id="row-count">Записи</strong><button id="filter-toggle" class="secondary">Фильтры</button></div><div class="toolbar-right"><select id="operation" aria-label="Операция"><option value="insert_one">Добавить запись</option><option value="update_one">Изменить запись</option><option value="update_many">Массовое изменение</option><option value="insert_many">Добавить несколько строк</option><option value="insert_linked">Автор и книга</option><option value="insert_order_batch">Покупатель и заказы</option></select><button id="open-operation" class="primary">Открыть форму</button></div></div>
+        <form id="filter-form" class="filters" hidden><div class="section-heading"><strong>Условия фильтра</strong><small>Все условия объединяются через И (AND).</small></div><div id="filter-rows"></div><div class="actions"><button type="button" id="add-filter" class="secondary">+ Условие</button><button type="submit" class="primary">Применить</button><button type="button" id="clear-filter" class="quiet">Сбросить</button></div></form>
+        <div class="table-scroll"><table><thead id="table-head"></thead><tbody id="table-body"></tbody></table></div><p class="table-note">Выбери «Изменить» в строке или открой форму нужной операции.</p>
+      </section>
+      <section id="operation-panel" class="operation-panel" hidden><div class="section-heading"><div><h2 id="operation-title"></h2><p id="operation-hint" class="muted"></p></div><button id="close-operation" class="quiet">Отмена</button></div><form id="data-form"><div id="operation-fields"></div><div class="actions"><button id="save" type="submit" class="primary">Сохранить</button><button id="cancel-operation" type="button" class="secondary">Отмена и назад</button></div><p id="operation-error" class="error" role="alert" hidden></p></form></section>
+      <details id="receipt" hidden><summary>Результат последней операции</summary><pre id="receipt-body"></pre></details>
+      <footer>Изменения сохраняются в PostgreSQL. Незавершённую форму можно отменить без записи в базу.</footer>
+    </main>
+  </div>
+</body></html>
